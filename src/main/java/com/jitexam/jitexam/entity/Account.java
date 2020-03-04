@@ -33,10 +33,6 @@ public class Account {
     private Client defaultclient;
 
 
-    //private int defaultincometaxrateid;
-    //private int defaultvatrateid;
-
-
     @ManyToOne
     @JoinColumn(name = "defaultproject")
     private Project defaultproject;
