@@ -1,6 +1,6 @@
 package com.jitexam.jitexam.service;
 
-import com.jitexam.jitexam.dto.WorkReportEntry;
+import com.jitexam.jitexam.dto.WorkReport;
 import com.jitexam.jitexam.entity.Account;
 import com.jitexam.jitexam.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +23,5 @@ public class AccountServiceImpl implements AccountService{
     public List<Account> getAllData() {
         return accountRepository.getAllData();
     }
-
 
 }
