@@ -10,8 +10,11 @@ import java.util.stream.Collectors;
 @Builder
 public class WorkReport {
 
-
     private List<WorkReportEntry> entries;
+
+    public WorkReport(List<WorkReportEntry> entries) {
+        this.entries = entries;
+    }
 
     public static WorkReport buildReport(List<Object[]> results) {
         return new WorkReport(mapResultsToReportEntries(results));

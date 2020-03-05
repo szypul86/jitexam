@@ -1,7 +1,8 @@
 package com.jitexam.jitexam.controller;
 
+import com.jitexam.jitexam.dto.TravelReport;
 import com.jitexam.jitexam.dto.WorkReport;
-import com.jitexam.jitexam.service.WorkHoursReportService;
+import com.jitexam.jitexam.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,20 +16,40 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ReportsController {
 
-    private final WorkHoursReportService workHoursReportService;
+    private final ReportService reportService;
 
-    @GetMapping("/{param}")
-    WorkReport getAllWorkHoursReportDataSorted(@PathVariable("param") String param) {
-        return workHoursReportService.getAllWorkHoursReportDataSorted(param);
-    }
-    @GetMapping("/withProjects/{param}")
-    WorkReport getAllWorkHoursReportWithProjectDataSorted(@PathVariable("param") String param) {
-        return workHoursReportService.getAllWorkHoursReportWithProjectsDataSorted(param);
+    @GetMapping("/account/{param}")
+    WorkReport getAllWorkHoursReportByAccountSorted(@PathVariable("param") String param) {
+        return reportService.getAllWorkHoursReportByAccount(param);
     }
 
-    @GetMapping("csv/{param}")
+    @GetMapping("/client/{param}")
+    WorkReport getAllWorkHoursReportByClientSorted(@PathVariable("param") String param) {
+        return reportService.getAllWorkHoursReportByClient(param);
+    }
+    @GetMapping("/project/{param}")
+    WorkReport getAllWorkHoursReportByProjectSorted(@PathVariable("param") String param) {
+        return reportService.getAllWorkHoursReportByProject(param);
+    }
+
+    @GetMapping("/project/{param}/{surname}")
+    WorkReport getAllWorkHoursReportByProjectSorted(@PathVariable("param") String param, @PathVariable("surname") String surname ) {
+        return reportService.getAllWorkHoursReportByProjectBySurname(param, surname);
+    }
+
+    @GetMapping("/project/csv/{param}")
     String getCsvWorkHoursReport(@PathVariable("param") String param) throws IOException {
-        return workHoursReportService.writeToCSV(param);
+        return reportService.writeToCSV(param);
+    }
+
+    @GetMapping("/filteredClient/{client}/{param}")
+    WorkReport getCsvWorkHoursReport(@PathVariable("param") String param,@PathVariable("client") String clientName ) throws IOException {
+        return reportService.filterClientByName(clientName, param);
+    }
+
+    @GetMapping("/travel")
+    TravelReport getTravelReport() {
+        return reportService.getTravelReport();
     }
 
 

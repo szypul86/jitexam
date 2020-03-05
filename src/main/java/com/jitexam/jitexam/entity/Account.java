@@ -31,8 +31,6 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "defaultclient")
     private Client defaultclient;
-
-
     @ManyToOne
     @JoinColumn(name = "defaultproject")
     private Project defaultproject;

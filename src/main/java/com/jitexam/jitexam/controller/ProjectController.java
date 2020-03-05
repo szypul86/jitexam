@@ -13,8 +13,6 @@ import java.util.List;
 @RequestMapping("/api/projects")
 @RequiredArgsConstructor
 public class ProjectController {
-    /*public ResponseEntity<Page<Project>> getAllTasks(@PageableDefault(size = 100) Pageable pageable,
-}*/
 
     private final ProjectService projectService;
 
