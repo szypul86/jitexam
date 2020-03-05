@@ -12,13 +12,15 @@ public class WorkReportEntry {
     String surname;
     String client;
     BigDecimal sum;
+    String project;
 
     public static WorkReportEntry buildEntry(Object[] results) {
         return WorkReportEntry.builder()
                 .name((String) results[0])
                 .surname((String) results[1])
                 .client((String) results[2])
-                .sum((BigDecimal) results[3])
+                .project((String) results[3])
+                .sum((BigDecimal) results[4])
                 .build();
     }
 }
