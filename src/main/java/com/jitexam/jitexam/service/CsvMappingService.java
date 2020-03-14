@@ -15,13 +15,12 @@ import java.util.List;
 @Service
 public class CsvMappingService {
 
-    public <T> void mapToCsv(PrintWriter writer, List<T> objectsList, Class<T> outputClass) {
+    public <T> void mapToCsv(PrintWriter writer, List<T> objectsList, Class<T> outputClass, String[] columns) {
 
         try {
             ColumnPositionMappingStrategy<T> mapStrategy
                     = new ColumnPositionMappingStrategy<>();
             mapStrategy.setType(outputClass);
-            String[] columns = new String[]{"name", "surname", "client", "project", "sum"};
             mapStrategy.setColumnMapping(columns);
             StatefulBeanToCsv<T> btcsv = new StatefulBeanToCsvBuilder<T>(writer)
                     .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
@@ -29,7 +28,7 @@ public class CsvMappingService {
                     .withSeparator(',')
                     .build();
             btcsv.write(objectsList);
-            log.info("Report of {} successfully mapped to csv", outputClass.getName().substring(outputClass.getName().lastIndexOf('.')+1));
+            log.info("Report of {} successfully mapped to csv", outputClass.getName().substring(outputClass.getName().lastIndexOf('.') + 1));
 
         } catch (CsvException ex) {
             log.error("Error mapping Bean to CSV", ex);

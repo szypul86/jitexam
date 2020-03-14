@@ -19,18 +19,15 @@ public class JwtFilter implements javax.servlet.Filter {
 
         if (httpServletRequest == null || !header.startsWith("Bearer ")) {
             throw new ServletException("Wrong or empty header");
-        }
-        else{
+        } else {
             try {
                 String token = header.substring(7);
                 Claims claims = Jwts.parser().setSigningKey("Nala").parseClaimsJws(token).getBody();
                 servletRequest.setAttribute("claims", claims);
-            }
-            catch (Exception e)
-            {
-                throw  new ServletException("Wrong signing key");
+            } catch (Exception e) {
+                throw new ServletException("Wrong signing key");
             }
         }
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 }

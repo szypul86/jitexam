@@ -10,17 +10,17 @@ import java.math.RoundingMode;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class WorkTimeByClientAndProjectReportEntry {
+public class WorkTimeByClientProjectReportEntry {
     String client;
     String project;
-    BigDecimal sum;
+    BigDecimal hours;
 
-    public static WorkTimeByClientAndProjectReportEntry buildEntry(Object[] results) {
+    public static WorkTimeByClientProjectReportEntry buildEntry(Object[] results) {
         int size = results.length;
-        return WorkTimeByClientAndProjectReportEntry.builder()
+        return WorkTimeByClientProjectReportEntry.builder()
                 .client((String) results[1])
-                .sum(((BigDecimal) results[0]).setScale(2, RoundingMode.CEILING))
-                .project((String) (size<=2? null: results[2]))
+                .hours(((BigDecimal) results[0]).setScale(2, RoundingMode.CEILING))
+                .project((String) (size <= 2 ? null : results[2]))
                 .build();
     }
 }

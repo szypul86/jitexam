@@ -17,9 +17,9 @@ public class LoginController {
         long currentTimeMillis = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(user.getUsername())
-                .claim("roles","user")
+                .claim("roles", "user")
                 .setIssuedAt(new Date(currentTimeMillis))
-                .setExpiration(new Date(currentTimeMillis+20*60*1000))
+                .setExpiration(new Date(currentTimeMillis + 20 * 60 * 1000))
                 .signWith(SignatureAlgorithm.HS512, user.getPassword())
                 .compact();
 

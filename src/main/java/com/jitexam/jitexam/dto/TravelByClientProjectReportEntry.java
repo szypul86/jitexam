@@ -9,25 +9,22 @@ import java.math.BigInteger;
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TravelReportEntry {
-    private String name;
-    private String surname;
+public class TravelByClientProjectReportEntry {
+
     private String client;
     private String project;
     private String reservationBy;
     private BigInteger numberOfTravels;
     private BigInteger numberOfNights;
 
-    public static TravelReportEntry buildEntry(Object[] results) {
+    public static TravelByClientProjectReportEntry buildEntry(Object[] results) {
         int size = results.length;
-        return TravelReportEntry.builder()
+        return TravelByClientProjectReportEntry.builder()
                 .reservationBy((String) results[0])
                 .numberOfTravels((BigInteger) results[1])
                 .numberOfNights((BigInteger) results[2])
-                .name((String) results[3])
-                .surname((String) results[4])
-                .client((String) (size <= 5 ? null : results[5]))
-                .project((String) (size <= 6 ? null : results[6]))
+                .client((String) results[3])
+                .project((String) (size <= 4 ? null : results[4]))
                 .build();
     }
 }
