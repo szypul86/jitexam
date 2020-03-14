@@ -25,10 +25,10 @@ public class ReportRepository {
     public List<Object[]> getAllWorkHoursReportByAccountSortedByParam(String param) {
         Query query = entityManager.createNativeQuery("select a.name as name , a.surname as surname, sum(d2.worktime)/3600/1000 as hours from account a join timesheetreport t on a.id = t.accountid join dailytime d2 on t.id = d2.timesheetreportid join client c on d2.clientid = c.id group by  a.surname, a.name " +
                 " ORDER BY CASE WHEN :pamparam = 'name'  THEN a.name END ASC " +
-                ", CASE WHEN :pamparam = 'surname' THEN a.surname END ASC"+
-                ", CASE WHEN :pamparam = 'hours' THEN sum(d2.worktime)/3600/1000 END ASC"
+                ", CASE WHEN :param = 'surname' THEN a.surname END ASC"+
+                ", CASE WHEN :param = 'hours' THEN sum(d2.worktime)/3600/1000 END ASC"
         );
-        query.setParameter("pamparam" , param);
+        query.setParameter("param" , param);
         return query.getResultList();
     }
 
@@ -56,7 +56,16 @@ public class ReportRepository {
     }
 
     public List<Object[]> getAllWorkHoursReportByProjectBySurname(String param, String surname) {
-        Query query = entityManager.createNativeQuery("select a.name as name , a.surname as surname, sum(d2.worktime)/3600/1000 as hours, c.name as client , p.name as project  from account a join timesheetreport t on a.id = t.accountid join dailytime d2 on t.id = d2.timesheetreportid join client c on d2.clientid = c.id left join project p on d2.projectid = p.id " +
+        Query query = entityManager.createNativeQuery("select a.name as name ," +
+                " a.surname as surname," +
+                " sum(d2.worktime)/3600/1000 as hours," +
+                " c.name as client ," +
+                " p.name as project" +
+                "from account a " +
+                "join timesheetreport t on a.id = t.accountid " +
+                "join dailytime d2 on t.id = d2.timesheetreportid " +
+                "join client c on d2.clientid = c.id " +
+                "left join project p on d2.projectid = p.id " +
                 "where a.surname = :surname " +
                 "group by  a.surname, a.name, c.name, p.name " +
                 " ORDER BY CASE WHEN :pamparam = 'name'  THEN a.name END ASC " +
