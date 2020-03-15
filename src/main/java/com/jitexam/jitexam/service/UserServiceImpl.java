@@ -2,9 +2,10 @@ package com.jitexam.jitexam.service;
 
 import com.jitexam.jitexam.dto.UserDto;
 import com.jitexam.jitexam.entity.User;
-import com.jitexam.jitexam.repository.UserDao;
+import com.jitexam.jitexam.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,24 +13,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-//@RequiredArgsConstructor
+@Slf4j
+@RequiredArgsConstructor
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
-	
-	@Autowired
-	private  UserDao userDao;
 
-	@Autowired
-	private  BCryptPasswordEncoder encoder;
+	private final UserRepository userRepository;
+	private final BCryptPasswordEncoder encoder;
 
 
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userDao.findByUsername(username);
+		User user = userRepository.findByUsername(username);
 		if(user == null){
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
@@ -41,29 +39,27 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	public List<User> findAll() {
-		List<User> list = new ArrayList<>();
-		userDao.findAll().iterator().forEachRemaining(list::add);
-		return list;
+		return userRepository.findAll();
 	}
 
 	@Override
 	public void delete(Long id) {
-		userDao.deleteById(id);
+		userRepository.deleteById(id);
 	}
 
 	@Override
 	public void deleteAll() {
-		userDao.deleteAll();
+		userRepository.deleteAll();
 	}
 
 	@Override
 	public User findOne(String username) {
-		return userDao.findByUsername(username);
+		return userRepository.findByUsername(username);
 	}
 
 	@Override
 	public User findById(Long id) {
-		Optional<User> optionalUser = userDao.findById(id);
+		Optional<User> optionalUser = userRepository.findById(id);
 		return optionalUser.orElse(null);
 	}
 
@@ -72,20 +68,26 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         User user = findById(userDto.getId());
         if(user != null) {
             BeanUtils.copyProperties(userDto, user, "password");
-            userDao.save(user);
+            userRepository.save(user);
         }
         return userDto;
     }
 
     @Override
     public User save(UserDto user) {
-	    User newUser = new User();
-	    newUser.setUsername(user.getUsername());
-	    newUser.setFirstName(user.getFirstName());
-	    newUser.setLastName(user.getLastName());
-	    newUser.setPassword(encoder.encode(user.getPassword()));
-		newUser.setAge(user.getAge());
-		newUser.setSalary(user.getSalary());
-        return userDao.save(newUser);
+		Optional<User> optionalUser = userRepository.findByFirstNameAndLastName(user.getFirstName(),user.getLastName());
+		if(optionalUser.isPresent()){
+			log.error("User with that name and surname already exists");
+			throw new IllegalArgumentException("User with that name and surname already exists");
+		}
+		else {
+			User newUser = new User();
+			newUser.setId(null);
+			newUser.setUsername(user.getUsername());
+			newUser.setFirstName(user.getFirstName());
+			newUser.setLastName(user.getLastName());
+			newUser.setPassword(encoder.encode(user.getPassword()));
+			return userRepository.save(newUser);
+		}
     }
 }

@@ -13,10 +13,7 @@ public interface UserService {
     List<User> findAll();
     void delete(Long id);
     void deleteAll();
-
     User findOne(String username);
-
     User findById(Long id);
-
     UserDto update(UserDto userDto);
 }
