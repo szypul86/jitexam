@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -28,7 +29,7 @@ public class CsvMappingService {
                     .withSeparator(',')
                     .build();
             btcsv.write(objectsList);
-            log.info("Report of {} successfully mapped to csv", outputClass.getName().substring(outputClass.getName().lastIndexOf('.') + 1));
+            log.info("Report of class {}, by {}, successfully mapped to csv", outputClass.getName().substring(outputClass.getName().lastIndexOf('.') + 1), Arrays.toString(columns));
 
         } catch (CsvException ex) {
             log.error("Error mapping Bean to CSV", ex);
