@@ -81,12 +81,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 			throw new IllegalArgumentException("User with that name and surname already exists");
 		}
 		else {
-			User newUser = new User();
-			newUser.setId(null);
-			newUser.setUsername(user.getUsername());
-			newUser.setFirstName(user.getFirstName());
-			newUser.setLastName(user.getLastName());
-			newUser.setPassword(encoder.encode(user.getPassword()));
+			User newUser = User.builder()
+					.firstName(user.getFirstName())
+					.lastName(user.getLastName())
+					.username(user.getUsername())
+					.password(encoder.encode(user.getPassword()))
+					.build();
 			return userRepository.save(newUser);
 		}
     }
